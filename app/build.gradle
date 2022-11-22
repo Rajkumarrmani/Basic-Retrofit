@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+}
+
+ext {
+    applicationId = "com.cloudin.task"
+    minSdkVersion = 24 // Lollipop
+    compileSdkVersion = 33 // Android 12
+    targetSdkVersion = 33 // Android 12
+    versionMajor = 1    // major changes
+    versionMinor = 0    // minor changes
+    versionPatch = 0  // bug fixes
+    versionClassifier = null  // version classifier eg. alpha (a), beta (b)
+    isSnapshot = null  // test build before production
+}
+
+android {
+    namespace 'com.cloudin.task'
+    compileSdk 33
+
+    defaultConfig {
+
+        applicationId(project.ext.applicationId)
+        minSdk(project.ext.minSdkVersion)
+        targetSdk(project.ext.targetSdkVersion)
+        versionCode(project.getVersionCode())
+        versionName(project.getVersionName())
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    configurations {
+        ktlint
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+    // Timber - Log
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Material Design
+    implementation 'com.google.android.material:material:1.7.0'
+
+    // Run time Permission
+    implementation 'com.karumi:dexter:6.2.3'
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+
+    implementation "androidx.activity:activity-ktx:1.6.1"
+
+    // Kotlin Coroutines
+    def coroutines_android_version = '1.5.2-native-mt'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+
+    // Ktlint Tool
+    ktlint "com.pinterest:ktlint:0.36.0"
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
+}
+
+@SuppressWarnings(["unused", 'GrMethodMayBeStatic'])
+private Integer getVersionCode() {
+    return ext.minSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 +
+            ext.versionPatch
+}
+
+@SuppressWarnings(["unused", 'GrMethodMayBeStatic'])
+private String getVersionName() {
+    String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+
+    if (ext.versionClassifier ==
+            null && ext.isSnapshot) {
+        ext.versionClassifier = "SNAPSHOT"
+    }
+
+    if (ext.versionClassifier != null) {
+        versionName += "-" + ext.versionClassifier
+    }
+
+    if (ext.isSnapshot) versionName += "-" + "SNAPSHOT"
+
+    return versionName
+}
