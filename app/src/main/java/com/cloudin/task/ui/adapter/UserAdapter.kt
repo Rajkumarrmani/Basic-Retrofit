@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cloudin.task.R
@@ -54,6 +55,14 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
                     .load(item.picture.medium)
                     .placeholder(R.drawable.ic_user_photo)
                     .into(binding.userImage)
+
+                parentCard.setOnClickListener {
+                    Toast.makeText(
+                        itemView.context,
+                        "${itemView.resources.getText(R.string.test_click_text)} ${userName.text}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
