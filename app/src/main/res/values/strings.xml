@@ -2,4 +2,5 @@
     <string name="app_name">CloudIn</string>
     <string name="users">Users</string>
     <string name="no_user_record">No user found</string>
+    <string name="server_error">Please try after some time</string>
 </resources>
