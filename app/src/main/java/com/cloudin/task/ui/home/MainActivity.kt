@@ -1,5 +1,8 @@
 package com.cloudin.task.ui.home
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -29,12 +32,16 @@ class MainActivity : AppCompatActivity() {
             recyclerView.visibility = View.GONE
             recyclerView.adapter = userAdapter
         }
+        if (isOnline())
+            setUpObservers()
+        else
+            Toast.makeText(this, resources.getText(R.string.check_internet), Toast.LENGTH_SHORT)
+                .show()
 
-        setUpObservers()
     }
 
     private fun setUpObservers() {
-        viewModel.userData2.observe(this) { data ->
+        viewModel.userData.observe(this) { data ->
             if (data.isSuccessful && data.code() == 200) {
                 binding.apply {
                     progressIndicator.pauseAnimation()
@@ -53,5 +60,22 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
+    }
+
+    private fun isOnline(): Boolean {
+        val connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true
+            }
+        }
+        return false
     }
 }

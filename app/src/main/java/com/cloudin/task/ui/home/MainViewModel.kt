@@ -10,7 +10,7 @@ class MainViewModel : ViewModel() {
 
     private val repository = DefaultRepository(RetrofitInstance.api)
 
-    var userData2 = liveData(Dispatchers.IO) {
+    var userData = liveData(Dispatchers.IO) {
         val result = repository.getUserData()
         emit(result)
     }
